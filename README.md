@@ -28,24 +28,33 @@ PORT=3000
 
 ## Database Setup
 
-The app uses PostgreSQL with TypeORM and auto-synchronizes schema on startup (no manual migrations needed in development).
+The app uses PostgreSQL with TypeORM and auto-synchronizes schema on startup. No manual migrations are needed.
 
-### For Production Deployments
+### For Production Deployments (Render.com, etc.)
 
-**Build and deploy command:**
+**Simple build command - no migrations needed:**
 ```bash
 npm install && npm run build
 ```
 
-The app handles database synchronization automatically via TypeORM's `synchronize: true` setting.
+The app automatically:
+- Handles SSL/TLS connections for cloud databases
+- Synchronizes the database schema when it starts
+- Creates tables for `IntegrationPartner` and `Transaction` on first run
 
-**If you need to generate migrations:**
+### Advanced: Manual Migrations (Development Only)
+
+**Generate a migration:**
 ```bash
 npm run db:migrate:generate
+```
+
+**Run migrations:**
+```bash
 npm run db:migrate:run
 ```
 
-**To revert migrations:**
+**Revert migrations:**
 ```bash
 npm run db:migrate:revert
 ```
