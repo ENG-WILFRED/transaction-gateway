@@ -7,7 +7,8 @@ A secure NestJS microservice for ingesting pension contribution notifications fr
 - JWT-based authentication for external partners
 - Idempotent transaction recording
 - Validation and audit trail
-- SQLite database for simplicity
+- PostgreSQL database with automatic schema synchronization
+- Swagger API documentation at `/api`
 
 ## Installation
 
@@ -19,34 +20,52 @@ npm install
 
 Create a `.env` file:
 
-```
-JWT_SECRET=your_secret_key
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/transactions_db
+JWT_SECRET=your_secret_key_here
 PORT=3000
 ```
 
 ## Database Setup
 
-The app uses SQLite and auto-synchronizes on startup.
+The app uses PostgreSQL with TypeORM and auto-synchronizes schema on startup (no manual migrations needed in development).
 
-To seed a partner (for testing):
+### For Production Deployments
 
-You can manually insert into the database or use a tool.
+**Build and deploy command:**
+```bash
+npm install && npm run build
+```
 
-Example partner:
+The app handles database synchronization automatically via TypeORM's `synchronize: true` setting.
 
-- name: BANK_X
-- clientId: bank_client_1
-- clientSecret: hashed_password (use bcrypt to hash a plain secret)
+**If you need to generate migrations:**
+```bash
+npm run db:migrate:generate
+npm run db:migrate:run
+```
+
+**To revert migrations:**
+```bash
+npm run db:migrate:revert
+```
 
 ## Running the app
 
 ```bash
-# development
+# development (with hot reload)
 npm run start:dev
 
 # production
 npm run start:prod
+
+# debug mode
+npm run start:debug
 ```
+
+## API Documentation
+
+Access Swagger UI at: **http://localhost:3000/api**
 
 ## API Endpoints
 
