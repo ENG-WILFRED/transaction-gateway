@@ -15,7 +15,11 @@ import { TransactionsModule } from './transactions/transactions.module';
       type: 'postgres',
       url: process.env.DATABASE_URL,
       entities: [IntegrationPartner, Transaction],
-      synchronize: true, // for dev
+      synchronize: true,
+      ssl:
+        process.env.DATABASE_URL && !process.env.DATABASE_URL.includes('localhost')
+          ? { rejectUnauthorized: false }
+          : false,
     }),
     AuthModule,
     TransactionsModule,
